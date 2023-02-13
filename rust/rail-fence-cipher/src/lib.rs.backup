@@ -1,0 +1,30 @@
+pub struct RailFence(u32);
+
+impl RailFence {
+    pub fn new(rails: u32) -> RailFence {
+        RailFence(rails)
+    }
+
+    pub fn encode(&self, text: &str) -> String {
+        let mut res = String::with_capacity(text.len());
+        for c in text.chars().step_by(4) { res.push(c); }
+        for c in text.chars().skip(1).step_by(2) { res.push(c); }
+        for c in text.chars().skip(2).step_by(4) { res.push(c); }
+        res
+    }
+
+    pub fn decode(&self, cipher: &str) -> String {
+        let mut it = cipher.chars();
+        let mut v: Vec<char> = vec![' '; cipher.len()];
+        for v in v.iter_mut().step_by(4) {
+            *v = it.next().unwrap();
+        }
+        for v in v.iter_mut().skip(1).step_by(2) {
+            *v = it.next().unwrap();
+        }
+        for v in v.iter_mut().skip(2).step_by(4) {
+            *v = it.next().unwrap();
+        }
+        v.into_iter().collect()
+    }
+}
